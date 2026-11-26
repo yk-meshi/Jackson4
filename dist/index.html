@@ -51,3 +51,47 @@ startClock=function(){if(!timed||timerId||gameOver)return;timerId=setInterval(()
 <style>.title{font-size:clamp(30px,6vw,58px);letter-spacing:-.06em;line-height:.95}.lead{font-size:14px}</style>
 <script>document.querySelector('.rules').innerHTML='<strong>遊び方</strong><br>自分の番に1個置き、「ボタン」を押します。選択した軌道に沿ってコインが1マス移動します。移動後に縦・横・斜め4個並べば勝ち。勝負がつくまで続けます。';</script>
 <script>const placeWithoutForbiddenWord=place;place=function(x,y){placeWithoutForbiddenWord(x,y);if($('message').textContent.includes('オービト'))$('message').textContent='置きました。「ボタン」を押してください。'};</script>
+<style>
+.name-lottery{margin:18px 0 22px;padding:16px;border:1px solid #4f5564;border-radius:16px;background:#171b24}
+.name-lottery h2{margin:0 0 12px;font-size:15px;color:#f4f0e8}
+.name-row{margin:8px 0}
+.name-row input{width:100%;box-sizing:border-box;padding:9px 10px;border:1px solid #596171;border-radius:8px;background:#242a35;color:#fff;font:inherit}
+.draw-first{width:100%;margin-top:10px;padding:11px;border:0;border-radius:9px;background:#d8a75a;color:#171a21;font:700 14px inherit;cursor:pointer}
+.draw-first:disabled{opacity:.65;cursor:default}
+.draw-result{margin-top:12px;min-height:20px;text-align:center;color:#8ee1d6;font-size:14px;font-weight:700}
+.game-locked{opacity:.52;pointer-events:none}
+</style>
+<script>
+(()=>{
+  const panel=document.querySelector('.panel');
+  const existingFirst=panel.querySelector('.actions');
+  if(existingFirst) existingFirst.closest('div').style.display='none';
+
+  const box=document.createElement('section');
+  box.className='name-lottery';
+  box.innerHTML='<h2>対戦者</h2><div class="name-row"><input id="playerA" maxlength="20" aria-label="1人目の名前" placeholder="名前を入力"></div><div class="name-row"><input id="playerB" maxlength="20" aria-label="2人目の名前" placeholder="名前を入力"></div><button id="drawFirst" class="draw-first">先攻を決める</button><div id="drawResult" class="draw-result"></div>';
+  panel.insertBefore(box,panel.firstElementChild);
+
+  let ready=false;
+  const board=$('board');
+  board.classList.add('game-locked');
+  const originalPlace=place;
+  place=function(x,y){if(!ready){$('message').textContent='名前を入力して「先攻を決める」を押してください。';return}originalPlace(x,y)};
+  const originalReset=$('reset').onclick;
+  $('reset').onclick=()=>{ready=false;board.classList.add('game-locked');$('drawResult').textContent='';$('drawFirst').disabled=false;originalReset();};
+  $('drawFirst').onclick=()=>{
+    const honor=name=>{const value=name.trim();if(!value)return 'プレイヤー';return value.endsWith('さん')?value:value+'さん'};
+    const a=honor($('playerA').value);
+    const b=honor($('playerB').value);
+    const firstIsWhite=Math.random()<.5;
+    first=firstIsWhite?'white':'black';
+    ready=true;
+    board.classList.remove('game-locked');
+    $('drawFirst').disabled=true;
+    $('drawResult').textContent=(firstIsWhite?a:b)+'が白・先攻 / '+(firstIsWhite?b:a)+'が黒・後攻';
+    $('message').textContent=(firstIsWhite?a:b)+'の番です。空いているマスに置いてください。';
+    fresh();
+    $('message').textContent=(firstIsWhite?a:b)+'の番です。空いているマスに置いてください。';
+  };
+})();
+</script>
