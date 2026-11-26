@@ -107,3 +107,10 @@ GitHub Pagesで実行できるのは、静的な`dist/index.html`だけです。
 
 リアルタイム対戦を動かすときは、`server.js`をWindows Server上で起動してください。
 
+## License
+
+Copyright (c) 2026 yakimeshi
+
+All rights reserved.
+
+このリポジトリのコード、画像、ゲームデザイン、文章の無断使用・改変・再配布・商用利用を禁止します。
