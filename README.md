@@ -26,32 +26,56 @@ work/
 
 ## Windows Serverでの準備
 
-Windows ServerにNode.jsをインストールしたあと、GitHubからこのプロジェクトをダウンロードして、任意の場所に展開します。
+### 1. GitHubから取得
 
-例：
+リポジトリ画面で`Code`を押し、`Download ZIP`を選びます。Windows Server上でZIPを展開し、プロジェクトフォルダを例えば次の場所に置きます。
 
 ```text
 C:\Jackson4\
-├─ dist\
-│  └─ index.html
-├─ server.js
-├─ package.json
-└─ README.md
 ```
 
-PowerShellを開き、`package.json`があるフォルダで実行します。
+`package.json`と`server.js`が、プロジェクトフォルダの直下に見えていることを確認してください。
+
+### 2. Node.jsをインストール
+
+Windows ServerにNode.jsのLTS版をインストールします。インストール後、PowerShellを開いて次を実行します。
+
+```powershell
+node -v
+npm -v
+```
+
+バージョン番号が表示されれば、Node.jsの準備は完了です。
+
+### 3. 依存パッケージをインストール
+
+PowerShellでプロジェクトフォルダへ移動します。
 
 ```powershell
 cd C:\Jackson4
 npm install
-npm start
 ```
 
 `npm install`を実行すると、同じフォルダに`package-lock.json`が自動生成されます。
 
-```text
+```powershell
 C:\Jackson4\package-lock.json
 ```
+
+### 4. サーバーを起動
+
+```powershell
+npm start
+```
+
+次のような表示が出れば起動成功です。
+
+```text
+Jackson 4 server: http://localhost:8080
+WebSocket endpoint: ws://localhost:8080/ws
+```
+
+サーバーを停止するまで、PowerShellの画面は閉じないでください。
 
 ## 動作確認
 
